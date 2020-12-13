@@ -40,12 +40,10 @@ class Model {
                 this.quickSort(array, index, right);
             }
         }
-        console.log(array);
         return array;
     }
 
     dissolveInput(string) {
-        console.log(string)
         this.data = []
         var newArray = string.split(',');
         newArray.forEach(item => {
@@ -53,6 +51,12 @@ class Model {
             this.data.push(item)
         })
         this.data = this.quickSort(this.data, 0, this.data.length - 1)
+    }
+
+    dataFixingForShowing(data) {
+        const newData = data.join()
+        console.log(newData);
+        return newData
     }
 }
 class View {
@@ -67,6 +71,7 @@ class View {
         this.label.textContent = 'Enter the array and separate with ","'
         this.input = document.createElement('input')
         this.input.type = 'text'
+        this.input.id = 'enter'
         this.input.placeholder = '32,55,35,643,1,66'
         this.btnSubmit = document.createElement('button')
         this.btnSubmit.textContent = 'Go'
@@ -79,18 +84,25 @@ class View {
         this.root.append(this.header, this.form, this.results)
     }
 
-    bindQuickSort(handler) {
+    bindQuickSort(handlerForSort, handler) {
         this.root.addEventListener('click', event => {
             event.preventDefault();
 
             if (event.target.textContent === 'Go') {
-                handler(this.input.value)
+                handlerForSort(this.input.value)
             }
         })
     }
+    bindShowing(data) {
+        this.input.value = ''
+        const string = data.join()
+        console.log(string);
+        if (string) {
+            this.results.textContent = string
+        } else {
+            this.results.textContent = 'Result of the quick sort will appear here!'
+        }
 
-    Showing(newArray) {
-        this.results.textContent = newArray.join()
     }
 }
 class Controller {
@@ -99,19 +111,20 @@ class Controller {
         this.view = view
 
         this.handelQuickSort = this.handelQuickSort.bind(this)
-        this.handelShowing = this.handelQuickSort.bind(this)
+        this.handelShowing = this.handelShowing.bind(this)
 
-        this.view.bindQuickSort(this.handelQuickSort)
+        this.view.bindQuickSort(this.handelQuickSort, this.handelShowing)
+
+        this.handelShowing()
     }
 
     handelQuickSort(inputValue) {
-        console.log(inputValue);
         this.model.dissolveInput(inputValue)
         this.handelShowing()
     }
 
     handelShowing() {
-        this.view.Showing(this.model.data)
+        this.view.bindShowing(this.model.data)
     }
 }
 const App = new Controller(new Model(), new View())
