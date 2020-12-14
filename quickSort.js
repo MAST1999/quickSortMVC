@@ -13,6 +13,8 @@ class Model {
         var pivot = array[Math.floor((right + left) / 2)],
             l = left,
             r = right;
+        console.log(`this is quickSort left: ${left}, right: ${right} and array: ${array}`);
+        console.log(pivot);
         while (l <= r) {
             while (array[l] < pivot) {
                 l++;
@@ -67,13 +69,15 @@ class View {
         this.header.textContent = 'Quick Sort'
 
         this.form = document.createElement('div')
+        this.form.id = 'form'
         this.label = document.createElement('label')
-        this.label.textContent = 'Enter the array and separate with ","'
+        this.label.textContent = 'Enter the array and separate with "," : '
         this.input = document.createElement('input')
         this.input.type = 'text'
         this.input.id = 'enter'
         this.input.placeholder = '32,55,35,643,1,66'
         this.btnSubmit = document.createElement('button')
+        this.btnSubmit.id = 'btnSubmit'
         this.btnSubmit.textContent = 'Go'
         this.form.append(this.label, this.input, this.btnSubmit)
 
@@ -94,9 +98,8 @@ class View {
         })
     }
     bindShowing(data) {
-        this.input.value = ''
+        // this.input.value = ''
         const string = data.join()
-        console.log(string);
         if (string) {
             this.results.textContent = string
         } else {
